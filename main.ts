@@ -10,11 +10,18 @@ const DEFAULT_SETTINGS: MyPluginSettings = {
 	mySetting: 'default'
 }
 
-export default class MyPlugin extends Plugin {
+export default class MarkAsReviewedPlugin extends Plugin {
 	settings: MyPluginSettings;
 
 	async onload() {
 		await this.loadSettings();
+
+		this.addCommand({
+			id: 'mark-note-as-reviewed',
+			name: 'Mark Note as Reviewed',
+			callback: () => this.markAsReviewed(),
+		});
+		this.addButton('header');
 
 		// This creates an icon in the left ribbon.
 		const ribbonIconEl = this.addRibbonIcon('dice', 'Sample Plugin', (evt: MouseEvent) => {
@@ -78,8 +85,70 @@ export default class MyPlugin extends Plugin {
 		this.registerInterval(window.setInterval(() => console.log('setInterval'), 5 * 60 * 1000));
 	}
 
-	onunload() {
+	async markAsReviewed() {
+		console.log("Marking as reviewed");
+		const activeFile = this.app.workspace.getActiveFile();
 
+		if (!activeFile) return;
+
+		const content = await this.app.vault.read(activeFile);
+		const now = new Date();
+		const dateStr = now.toLocaleString('en-IN', {
+			timeZone: 'Asia/Kolkata',
+			year: 'numeric',
+			month: '2-digit',
+			day: '2-digit',
+		}).replace(/(\d+)\/(\d+)\/(\d+)/, '$3-$2-$1');
+		const timeStr = now.toLocaleString('en-IN', {
+			timeZone: 'Asia/Kolkata',
+			hour: 'numeric',
+			minute: '2-digit',
+			hour12: true
+		});
+
+		const reviewedLine = `- Reviewed on [[${dateStr}]] at ${timeStr}`;
+		const dateHeadingRegex = /^(#+ ?Dates?)$/m;
+		const dateHeadingMatch = content.match(dateHeadingRegex);
+
+		let updatedContent;
+		if (dateHeadingMatch) {
+			const [fullMatch] = dateHeadingMatch;
+			updatedContent = content.replace(fullMatch, `${fullMatch}\n${reviewedLine}`);
+		} else {
+			updatedContent = `${content}\n\n## Dates\n${reviewedLine}`;
+		}
+
+		await this.app.vault.modify(activeFile, updatedContent);
+		new Notice(`Note "${activeFile.name}" marked as reviewed`);
+
+	}
+
+	addButton(location: string) {
+		const button = this.addRibbonIcon('check-circle', 'Mark as Reviewed', () => {
+			this.markAsReviewed();
+		});
+
+		if (location === 'header' || location === 'footer') {
+			this.app.workspace.on('layout-change', () => {
+				const activeView = this.app.workspace.getActiveViewOfType(MarkdownView);
+				if (activeView) {
+					const containerEl = location === 'header' 
+						? activeView.containerEl.querySelector('.view-header') 
+						: activeView.containerEl.querySelector('.view-footer');
+					
+					if (containerEl && !containerEl.querySelector('.mark-as-reviewed-button')) {
+						const newButton = button.cloneNode(true) as HTMLElement;
+						newButton.addClass('mark-as-reviewed-button');
+						containerEl.appendChild(newButton);
+						newButton.onclick = () => this.markAsReviewed();
+					}
+				}
+			});
+		}
+	}
+
+	onunload() {
+		console.log('Unloading Mark as Reviewed Plugin');
 	}
 
 	async loadSettings() {
@@ -97,26 +166,26 @@ class SampleModal extends Modal {
 	}
 
 	onOpen() {
-		const {contentEl} = this;
+		const { contentEl } = this;
 		contentEl.setText('Woah!');
 	}
 
 	onClose() {
-		const {contentEl} = this;
+		const { contentEl } = this;
 		contentEl.empty();
 	}
 }
 
 class SampleSettingTab extends PluginSettingTab {
-	plugin: MyPlugin;
+	plugin: MarkAsReviewedPlugin;
 
-	constructor(app: App, plugin: MyPlugin) {
+	constructor(app: App, plugin: MarkAsReviewedPlugin) {
 		super(app, plugin);
 		this.plugin = plugin;
 	}
 
 	display(): void {
-		const {containerEl} = this;
+		const { containerEl } = this;
 
 		containerEl.empty();
 

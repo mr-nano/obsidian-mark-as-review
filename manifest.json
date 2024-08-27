@@ -1,11 +1,10 @@
 {
-	"id": "sample-plugin",
-	"name": "Sample Plugin",
+	"id": "mark-as-reviewed",
+	"name": "Review note plugin",
 	"version": "1.0.0",
 	"minAppVersion": "0.15.0",
-	"description": "Demonstrates some of the capabilities of the Obsidian API.",
-	"author": "Obsidian",
-	"authorUrl": "https://obsidian.md",
-	"fundingUrl": "https://obsidian.md/pricing",
+	"description": "A plugin to mark notes as reviewed with current date time",
+	"author": "Dhruv Kapur",
+	"authorUrl": "https://collective-me.vercel.app/",
 	"isDesktopOnly": false
 }
