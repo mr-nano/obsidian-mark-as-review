@@ -58,6 +58,7 @@ export default class MarkAsReviewedPlugin extends Plugin {
 			this.markAsReviewed();
 		});
 
+		// TODO - footer does not work. The location is taken to make it more configruable later on.. but currently does not work
 		if (location === 'header' || location === 'footer') {
 			this.app.workspace.on('layout-change', () => {
 				const activeView = this.app.workspace.getActiveViewOfType(MarkdownView);

@@ -1,96 +1,47 @@
-# Obsidian Sample Plugin
+# MarkAsReviewed Plugin
 
-This is a sample plugin for Obsidian (https://obsidian.md).
+The **MarkAsReviewed Plugin** for Obsidian adds a convenient way to mark your notes as reviewed with a single click. This plugin updates your note with a timestamp under the `## Dates` heading, allowing you to track when you last reviewed the note.
 
-This project uses TypeScript to provide type checking and documentation.
-The repo depends on the latest plugin API (obsidian.d.ts) in TypeScript Definition format, which contains TSDoc comments describing what it does.
+## Features
 
-**Note:** The Obsidian API is still in early alpha and is subject to change at any time!
+- **Mark as Reviewed Command**: A command is added to Obsidian's command palette, allowing you to mark the active note as reviewed.
+- **Header/~~Footer~~ Button**: Adds a button in the header or footer of your notes, depending on your preference. Clicking this button marks the note as reviewed. **Currently only header is supported**
+- ~~**Customizable Date & Time Format**~~: The review date and time are added in the `YYYY-mm-dd` format with the time in a 12-hour format, adjusted to the Asia/Kolkata timezone. **The date time is hardcoded right now**
+- **Automatic Date Section Management**: If your note contains a `# Dates` section, the plugin will append the review timestamp to it. If the section is not present, it will create one.
 
-This sample plugin demonstrates some of the basic functionality the plugin API can do.
-- Adds a ribbon icon, which shows a Notice when clicked.
-- Adds a command "Open Sample Modal" which opens a Modal.
-- Adds a plugin setting tab to the settings page.
-- Registers a global click event and output 'click' to the console.
-- Registers a global interval which logs 'setInterval' to the console.
+## Installation
 
-## First time developing plugins?
+1. Download the latest release from the [GitHub Releases](https://github.com/your-repo/MarkAsReviewed/releases) page.
+2. Place the plugin files in your Obsidian vault's `.obsidian/plugins/MarkAsReviewed` directory.
+3. Enable the plugin from the Obsidian settings under the "Community Plugins" section.
 
-Quick starting guide for new plugin devs:
+## Usage
 
-- Check if [someone already developed a plugin for what you want](https://obsidian.md/plugins)! There might be an existing plugin similar enough that you can partner up with.
-- Make a copy of this repo as a template with the "Use this template" button (login to GitHub if you don't see it).
-- Clone your repo to a local development folder. For convenience, you can place this folder in your `.obsidian/plugins/your-plugin-name` folder.
-- Install NodeJS, then run `npm i` in the command line under your repo folder.
-- Run `npm run dev` to compile your plugin from `main.ts` to `main.js`.
-- Make changes to `main.ts` (or create new `.ts` files). Those changes should be automatically compiled into `main.js`.
-- Reload Obsidian to load the new version of your plugin.
-- Enable plugin in settings window.
-- For updates to the Obsidian API run `npm update` in the command line under your repo folder.
+1. **Marking a Note as Reviewed**:
+   - Use the command palette (Cmd/Ctrl+P) to search for "Mark Note as Reviewed" and select it.
+   - Alternatively, click the "Mark as Reviewed" button in the header or footer of your note.
 
-## Releasing new releases
+2. **Review Tracking**:
+   - The plugin will append a line under the `## Dates` section in your note, such as:
+     ```
+     ## Dates
+     - Reviewed on [[25-08-2024]] at 09:30 AM
+     ```
+   - If the `## Dates` section doesn't exist, the plugin will create it.
 
-- Update your `manifest.json` with your new version number, such as `1.0.1`, and the minimum Obsidian version required for your latest release.
-- Update your `versions.json` file with `"new-plugin-version": "minimum-obsidian-version"` so older versions of Obsidian can download an older version of your plugin that's compatible.
-- Create new GitHub release using your new version number as the "Tag version". Use the exact version number, don't include a prefix `v`. See here for an example: https://github.com/obsidianmd/obsidian-sample-plugin/releases
-- Upload the files `manifest.json`, `main.js`, `styles.css` as binary attachments. Note: The manifest.json file must be in two places, first the root path of your repository and also in the release.
-- Publish the release.
+## Contributing
 
-> You can simplify the version bump process by running `npm version patch`, `npm version minor` or `npm version major` after updating `minAppVersion` manually in `manifest.json`.
-> The command will bump version in `manifest.json` and `package.json`, and add the entry for the new version to `versions.json`
+Contributions, issues, and feature requests are welcome! Feel free to check out the [issues page](https://github.com/your-repo/MarkAsReviewed/issues) if you want to contribute.
 
-## Adding your plugin to the community plugin list
+## License
 
-- Check the [plugin guidelines](https://docs.obsidian.md/Plugins/Releasing/Plugin+guidelines).
-- Publish an initial version.
-- Make sure you have a `README.md` file in the root of your repo.
-- Make a pull request at https://github.com/obsidianmd/obsidian-releases to add your plugin.
+This project is licensed under the MIT License. See the [LICENSE](https://github.com/your-repo/MarkAsReviewed/blob/main/LICENSE) file for details.
 
-## How to use
+## Acknowledgments
 
-- Clone this repo.
-- Make sure your NodeJS is at least v16 (`node --version`).
-- `npm i` or `yarn` to install dependencies.
-- `npm run dev` to start compilation in watch mode.
+- Inspired by the need to keep track of reviewed notes easily in Obsidian.
+- Thanks to the Obsidian community for continuous support and ideas.
 
-## Manually installing the plugin
+---
 
-- Copy over `main.js`, `styles.css`, `manifest.json` to your vault `VaultFolder/.obsidian/plugins/your-plugin-id/`.
-
-## Improve code quality with eslint (optional)
-- [ESLint](https://eslint.org/) is a tool that analyzes your code to quickly find problems. You can run ESLint against your plugin to find common bugs and ways to improve your code. 
-- To use eslint with this project, make sure to install eslint from terminal:
-  - `npm install -g eslint`
-- To use eslint to analyze this project use this command:
-  - `eslint main.ts`
-  - eslint will then create a report with suggestions for code improvement by file and line number.
-- If your source code is in a folder, such as `src`, you can use eslint with this command to analyze all files in that folder:
-  - `eslint .\src\`
-
-## Funding URL
-
-You can include funding URLs where people who use your plugin can financially support it.
-
-The simple way is to set the `fundingUrl` field to your link in your `manifest.json` file:
-
-```json
-{
-    "fundingUrl": "https://buymeacoffee.com"
-}
-```
-
-If you have multiple URLs, you can also do:
-
-```json
-{
-    "fundingUrl": {
-        "Buy Me a Coffee": "https://buymeacoffee.com",
-        "GitHub Sponsor": "https://github.com/sponsors",
-        "Patreon": "https://www.patreon.com/"
-    }
-}
-```
-
-## API Documentation
-
-See https://github.com/obsidianmd/obsidian-api
+Feel free to modify any part of this to better suit your preferences or project details!
