@@ -1,10 +1,11 @@
 {
 	"id": "mark-as-reviewed",
 	"name": "Review note plugin",
-	"version": "1.0.0",
+	"version": "2.0.0",
 	"minAppVersion": "0.15.0",
-	"description": "A plugin to mark notes as reviewed with current date time",
+	"description": "A plugin to mark notes as reviewed with current date time with context",
 	"author": "Dhruv Kapur",
 	"authorUrl": "https://collective-me.vercel.app/",
-	"isDesktopOnly": false
+	"isDesktopOnly": false,
+	"isMobileCompatible": true 
 }
